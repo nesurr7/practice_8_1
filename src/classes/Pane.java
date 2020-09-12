@@ -2,102 +2,60 @@ package classes;
 
 import javax.swing.*;
 import java.awt.*;
-
-// реализация компонента
-class Figure extends JComponent {
-    private Color color;//Цвет
-    private int type;//Форма фигуры
-    private int x, y;
-    private int length, width;
-
-    ///////////////
-    Figure(int type, Color color, int x, int y, int length, int width) {
-        this.color = color;
-        this.type = type;
-        this.x = x;
-        this.y = y;
-        this.length = length;
-        this.width = width;
-    }
-
-    public void paintComponent(Graphics g) {//Выполняется автоматически//Находится в JComponent
-        //Когда JVM посчитает , что экран нужно обновить вызовется этот метод
-        // прорисовка фигуры
-        g.setColor(color);
-        switch (type) {
-            case 0:
-                g.fillOval(0, 0, length, width);
-                break;
-            case 1:
-                g.fillRect(0, 0, length, width);
-                break;
-            case 2:
-                g.fillOval(0, 0, length, length);
-                break;
-            case 3:
-                g.fillRect(0, 0, width, width);
-                break;
-        }
-    }
-}
+import java.util.ArrayList;
 
 public class Pane extends JFrame {
 
-    final int paneLength = 1366;
-    final int paneWidth = 780;
+    ArrayList<Shape> myShapes = new ArrayList<>();
+    Dimension dimScreen = Toolkit.getDefaultToolkit().getScreenSize();
+    int PANE_LENGTH =dimScreen.width;
+    int PANE_HEIGHT=dimScreen.height;
 
 
     public Color randomColor() {
         int type = ((int) (Math.random() * 175)) % 7;
-        switch (type) {
-            case 1:
-                return Color.red;
-            case 2:
-                return Color.green;
-            case 3:
-                return Color.BLUE;
-            case 4:
-                return Color.CYAN;
-            case 5:
-                return Color.MAGENTA;
-            case 6:
-                return Color.YELLOW;
-        }
-        return Color.pink;
+        return switch (type) {
+            case 1 -> Color.red;
+            case 2 -> Color.green;
+            case 3 -> Color.BLUE;
+            case 4 -> Color.CYAN;
+            case 5 -> Color.MAGENTA;
+            case 6 -> Color.YELLOW;
+            default -> Color.pink;
+        };
     }
 
+    public int generatePosX(){
+        return ((int) (Math.random() * (PANE_LENGTH)) % (PANE_LENGTH-100) );
+
+    }
+
+    public int generatePosY() {
+        return ((int) (Math.random() * (PANE_HEIGHT)) % (PANE_HEIGHT-100) );
+
+    }
 
     public Shape generate() {
         int type = (((int) (Math.random() * 100)) % 4);
         switch (type) {
-            case 0:
-                return new Oval(type, randomColor(), ((int) (Math.random() * (paneWidth) / 2)), ((int) (Math.random() * (paneLength / 2))), 80, 130);
-            case 1:
-                return new Rectangle(type, randomColor(), ((int) (Math.random() * (paneWidth) / 2)), ((int) (Math.random() * (paneLength / 2))), 120, 80);
-            case 2:
-                int a = ((int) (Math.random() * (paneWidth) / 2));
-                return new Oval(type, randomColor(), a, a, 50, 50);
-            case 3:
-                int b = ((int) (Math.random() * (paneWidth) / 2));
-                return new Rectangle(type, randomColor(), b, b, 70, 70);
+            case 0 -> { return new Oval(type, randomColor(), generatePosX() , generatePosY(), 50, 100); }
+            case 1 -> { return new Rectangle(type, randomColor(), generatePosX(), generatePosY(), 100, 50); }
+            case 2 -> { return new Oval(type, randomColor(), generatePosX(), generatePosY(), 50, 50); }
+            case 3 -> { return new Rectangle(type, randomColor(), generatePosX(), generatePosY(), 50, 50); }
         }
-        return new Rectangle(type, randomColor().brighter(), 50, 50, 40, 60);
-    }
-
-    public Figure initShape(Shape obj1) {
-        Figure figure = new Figure(obj1.type, obj1.color, obj1.x, obj1.y, obj1.length, obj1.width);
-        figure.setBounds(obj1.x, obj1.y, obj1.length, obj1.width);
-        return figure;
+        return null;
     }
 
     public Pane() {
-        super("Фигуры");//Задаем название для окна//невидимый фрэйм для текста
-        setDefaultCloseOperation(EXIT_ON_CLOSE);//выход
-        JLayeredPane lp = getLayeredPane();// панель с глубиной (слоистая)
+        super("Фигуры");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         for (int i = 0; i < 20; i++) {
-            lp.add(initShape(generate()), JLayeredPane.POPUP_LAYER);//300-тый слой =>ниже
+            Shape shape = generate();
+            myShapes.add(shape);
+            add(shape);
         }
-        setSize(paneWidth, paneLength);
+        setSize(PANE_LENGTH, PANE_HEIGHT);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
