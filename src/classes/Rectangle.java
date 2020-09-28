@@ -3,9 +3,12 @@ package classes;
 import java.awt.*;
 
 public class Rectangle extends Shape {
-    Rectangle(int type ,Color color,int x,int y , int length , int height) {
-       super(type ,color ,x,y,length ,height);
+    Rectangle(Color color,int x,int y , int length , int height) {
+       super(color ,x,y,length ,height);
     }
 
-
+    public void paintComponent(Graphics g) {
+        g.setColor(color);
+        g.fillRect(0, 0, length, height);
+    }
 }

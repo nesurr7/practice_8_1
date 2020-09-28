@@ -38,10 +38,10 @@ public class Pane extends JFrame {
     public Shape generate() {
         int type = (((int) (Math.random() * 100)) % 4);
         switch (type) {
-            case 0 -> { return new Oval(type, randomColor(), generatePosX() , generatePosY(), 50, 100); }
-            case 1 -> { return new Rectangle(type, randomColor(), generatePosX(), generatePosY(), 100, 50); }
-            case 2 -> { return new Oval(type, randomColor(), generatePosX(), generatePosY(), 50, 50); }
-            case 3 -> { return new Rectangle(type, randomColor(), generatePosX(), generatePosY(), 50, 50); }
+            case 0 -> { return new Oval(randomColor(), generatePosX() , generatePosY(), 50, 100); }
+            case 1 -> { return new Rectangle(randomColor(), generatePosX(), generatePosY(), 100, 50); }
+            case 2 -> { return new Oval(randomColor(), generatePosX(), generatePosY(), 50, 50); }
+            case 3 -> { return new Rectangle(randomColor(), generatePosX(), generatePosY(), 50, 50); }
         }
         return null;
     }
